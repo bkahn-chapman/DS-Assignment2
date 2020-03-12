@@ -1,6 +1,4 @@
-#include "ClassicMode.h"
-#include "DoughnutMode.h"
-#include "MirrorMode.h"
+#include "GameOfLife.h"
 #include <iostream>
 #include <fstream>
 #include <cmath>
@@ -138,7 +136,6 @@ int main(int argc, char** argv)
         }
       }
     }
-
     if(modeChoice == "classic")
     {
       ClassicMode *clm = new ClassicMode();

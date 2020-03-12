@@ -1,4 +1,4 @@
-#include "ClassicMode.h"
+#include "GameOfLife.h"
 #include <iostream>
 #include <fstream>
 #include <cmath>
@@ -269,7 +269,7 @@ int ClassicMode::CheckSideL(int row, int column)
   {
     numAround++;
   }
-  if(previousMap[row][column-1] == 'X')
+  if(previousMap[row][column+1] == 'X')
   {
     numAround++;
   }
@@ -338,69 +338,67 @@ void ClassicMode::NewGen()
   {
     for(int j = 0; j < numColumns; ++j){
       numAround = 0;
-      if(previousMap[i][j] == 'X'){
-        if(i == 0){
-          if(j == 0){
-            numAround = CheckCornerTL(i, j);
-          }
-          else if(j == (numColumns - 1)){
-            numAround = CheckCornerTR(i, j);
-          }
-          else
-          {
-            numAround = CheckSideT(i, j);
-          }
+      if(i == 0){
+        if(j == 0){
+          numAround = CheckCornerTL(i, j);
         }
-        else if(i == (numRows - 1))
-        {
-          if(j == 0)
-          {
-            numAround = CheckCornerBL(i, j);
-          }
-          else if(j == (numColumns - 1))
-          {
-            numAround = CheckCornerBR(i, j);
-          }
-          else
-          {
-            numAround = CheckSideB(i, j);
-          }
+        else if(j == (numColumns - 1)){
+          numAround = CheckCornerTR(i, j);
         }
-        else if(j == 0)
+        else
         {
-          if(i != 0 && i != (numRows -1))
-          {
-            numAround = CheckSideL(i, j);
-          }
+          numAround = CheckSideT(i, j);
+        }
+      }
+      else if(i == (numRows - 1))
+      {
+        if(j == 0)
+        {
+          numAround = CheckCornerBL(i, j);
         }
         else if(j == (numColumns - 1))
         {
-          if(i != 0 && i != (numRows -1))
-          {
-            numAround = CheckSideR(i, j);
-          }
+          numAround = CheckCornerBR(i, j);
         }
         else
         {
-          numAround = CheckMiddle(i, j);
+          numAround = CheckSideB(i, j);
         }
+      }
+      else if(j == 0)
+      {
+        if(i != 0 && i != (numRows -1))
+        {
+          numAround = CheckSideL(i, j);
+        }
+      }
+      else if(j == (numColumns - 1))
+      {
+        if(i != 0 && i != (numRows -1))
+        {
+          numAround = CheckSideR(i, j);
+        }
+      }
+      else
+      {
+        numAround = CheckMiddle(i, j);
+      }
 
-        if(numAround <= 1)
-        {
-          currentMap[i][j] = '-';
-        }
-        else if(numAround < 3)
-        {
+      if(numAround <= 1)
+      {
+        currentMap[i][j] = '-';
+      }
+      else if(numAround < 3)
+      {
 
-        }
-        else if(numAround < 4)
-        {
-          currentMap[i][j] = 'X';
-        }
-        else
-        {
-          currentMap[i][j] = '-';
-        }
+      }
+      else if(numAround < 4)
+      {
+        currentMap[i][j] = 'X';
+      }
+      else
+      {
+        currentMap[i][j] = '-';
       }
     }
   }
@@ -424,6 +422,7 @@ void ClassicMode::PrintMap(string choice, string outputFile)
 bool ClassicMode::CheckValid()
 {
   bool isValid = false;
+  int loopCheck = 0;
   if(currentMap[0][0]  == '-')
   {
     for(int i = 0; i < numRows; ++i)
@@ -450,5 +449,22 @@ bool ClassicMode::CheckValid()
       }
     }
   }
+  /*
+  for(int i = 0; i < numRows; ++i)
+  {
+    for(int j = 0; j < numColumns; ++j)
+    {
+      if(currentMap[i][j] == previousMap[i][j])
+      {
+        loopCheck++;
+      }
+    }
+  }
+  cout << loopCheck << endl;
+  if(loopCheck != (numRows * numColumns))
+  {
+    isValid = true;
+  }
+  */
   return isValid;
 }
