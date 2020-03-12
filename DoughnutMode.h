@@ -4,11 +4,11 @@
 #include <string>
 using namespace std;
 
-class ClassicMode
+class DoughnutMode
 {
   public:
-    ClassicMode(); //default constructor
-    ~ClassicMode(); //destructor
+    DoughnutMode(); //default constructor
+    ~DoughnutMode(); //destructor
 
     void RandomMap(int rows, int columns, float cellFreq); //creates a map for a random gen
     void GivenMap(int rows, int columns, string fileName); //creates a map for a given gen

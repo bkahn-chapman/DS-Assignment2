@@ -1,4 +1,6 @@
-#include "GameOfLife.h"
+#include "ClassicMode.h"
+#include "DoughnutMode.h"
+#include "MirrorMode.h"
 #include <iostream>
 #include <fstream>
 #include <cmath>
@@ -7,20 +9,23 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-  GameOfLife *gol = new GameOfLife();
+  ClassicMode *clm = new ClassicMode();
 
   int fileCheck = 0;
+  string modeChoice;
+  string mapChoice;
+  string mapInput;
+  int numRows;
+  int numColumns;
+  float cellFreq = 0;
 
   cout << "Welcome to the Game of Life!" << endl;
 
   while(fileCheck == 0)
   {
-    string mapInput = "";
+    mapInput = "";
     std::string inputRows = "";
     std::string inputColumns = "";
-    int numRows;
-    int numColumns;
-    float cellFreq = 0;
 
     cout << "If you would like to use a provide a map file for the simulation to use, please type the name of the file. Otherwise, please type 'random' for a random map." << endl;
     cin >> mapInput;
@@ -51,13 +56,11 @@ int main(int argc, char** argv)
           cellFreq = 0;
         }
       }
-      cout << endl;
-      gol -> RandomMap(numRows, numColumns, cellFreq);
+      mapChoice = "random";
     }
     else if(inFS)
     {
       fileCheck = 1;
-      cout << endl;
       int numLines = 1;
       char c;
       while(!inFS.eof() && numLines < 3)
@@ -83,23 +86,152 @@ int main(int argc, char** argv)
       inFS.close();
       numRows = std::stoi(inputRows);
       numColumns = std::stoi(inputColumns);
-      gol -> GivenMap(numRows, numColumns, mapInput);
+      mapChoice = "given";
     }
     else
     {
-      cout << "That file could not be found. Please try another." << endl;
-    }
-  }
-  bool isValid = true;
-  while(isValid)
-  {
-    gol -> PrintMap();
-    gol -> NewGen();
-    if(!(gol -> CheckValid()))
-    {
-      isValid = false;
-      gol -> PrintMap();
+      cout << "That file could not be found. Please try another or type 'random'." << endl;
     }
   }
 
+  int modeCheck = 0;
+  int waitCheck = 0;
+  int outputCheck = 0;
+  bool isValid = true;
+  string waitChoice;
+  string outputFile;
+  while(modeCheck == 0)
+  {
+    cout << "What boundary mode would you like to simulate? Please type 'classic', 'doughnut', or 'mirror'." << endl;
+    cin >> modeChoice;
+
+    for(int i = 0; i < modeChoice.length(); ++i)
+    {
+      modeChoice[i] = tolower(modeChoice[i]);
+    }
+
+    if(modeChoice == "classic" || modeChoice == "doughnut" || modeChoice == "mirror")
+    {
+      while(waitCheck == 0)
+      {
+        cout << "Would you like the program to 'pause' between generations, wait for you to press 'enter', or 'write' out to a file?" << endl;
+        cin >> waitChoice;
+        for(int i = 0; i < waitChoice.length(); ++i)
+        {
+          waitChoice[i] = tolower(waitChoice[i]);
+        }
+        if(waitChoice == "write")
+        {
+          cout << "What would you like your output file to be named?" << endl;
+          cin >> outputFile;
+          cout << endl;
+          waitCheck = 1;
+        }
+        else if(waitChoice == "enter" || waitChoice == "pause")
+        {
+          waitCheck = 1;
+          cout << endl;
+        }
+        else
+        {
+          cout << "This was not one of the choices. Please type one of the words in single quotation marks." << endl;
+        }
+      }
+    }
+
+    if(modeChoice == "classic")
+    {
+      ClassicMode *clm = new ClassicMode();
+      if(mapChoice == "random")
+      {
+        clm -> RandomMap(numRows, numColumns, cellFreq);
+      }
+      else if(mapChoice == "given")
+      {
+        clm -> GivenMap(numRows, numColumns, mapInput);
+      }
+      while(isValid)
+      {
+        clm -> PrintMap(waitChoice, outputFile);
+        clm -> NewGen();
+        if(!(clm -> CheckValid()))
+        {
+          isValid = false;
+          clm -> PrintMap(waitChoice, outputFile);
+        }
+      }
+      modeCheck = 1;
+    }
+    else if(modeChoice == "doughnut")
+    {
+      DoughnutMode *dom = new DoughnutMode();
+      if(mapChoice == "random")
+      {
+        dom -> RandomMap(numRows, numColumns, cellFreq);
+      }
+      else if(mapChoice == "given")
+      {
+        dom -> GivenMap(numRows, numColumns, mapInput);
+      }
+      while(isValid)
+      {
+        dom -> PrintMap(waitChoice, outputFile);
+        dom -> NewGen();
+        if(!(dom -> CheckValid()))
+        {
+          isValid = false;
+          dom -> PrintMap(waitChoice, outputFile);
+        }
+      }
+      modeCheck = 1;
+    }
+    else if(modeChoice == "mirror")
+    {
+      MirrorMode *mim = new MirrorMode();
+      if(mapChoice == "random")
+      {
+        mim -> RandomMap(numRows, numColumns, cellFreq);
+      }
+      else if(mapChoice == "given")
+      {
+        mim -> GivenMap(numRows, numColumns, mapInput);
+      }
+      while(isValid)
+      {
+        mim -> PrintMap(waitChoice, outputFile);
+        mim -> NewGen();
+        if(!(mim -> CheckValid()))
+        {
+          isValid = false;
+          mim -> PrintMap(waitChoice, outputFile);
+        }
+      }
+      modeCheck = 1;
+    }
+    else
+    {
+      cout << "This is not a valid mode. Please try again." << endl;
+      modeCheck = 0;
+    }
+  }
+  cout << "Thank you for using my program!" << endl;
+
+  /*
+  int enterCheck = 0;
+  while(enterCheck == 0)
+  {
+    string enterInput = "";
+    cout << "Press enter." << endl;
+    cin.get();
+    if(cin.get() == '\n')
+    {
+      cout << "Enter got." << endl;
+      enterCheck = 1;
+    }
+    else
+    {
+      cout << "Enter not got." << endl;
+    }
+  }
+  */
 }

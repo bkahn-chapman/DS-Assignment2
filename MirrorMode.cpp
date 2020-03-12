@@ -1,21 +1,21 @@
-#include "ClassicMode.h"
+#include "MirrorMode.h"
 #include <iostream>
 #include <fstream>
 #include <cmath>
 #include <string>
 using namespace std;
 
-ClassicMode::ClassicMode()
+MirrorMode::MirrorMode()
 {
 
 }
 
-ClassicMode::~ClassicMode()
+MirrorMode::~MirrorMode()
 {
 
 }
 
-void ClassicMode::RandomMap(int rows, int columns, float cellFreq)
+void MirrorMode::RandomMap(int rows, int columns, float cellFreq)
 {
   numRows = rows;
   numColumns = columns;
@@ -62,7 +62,7 @@ void ClassicMode::RandomMap(int rows, int columns, float cellFreq)
   }
 }
 
-void ClassicMode::GivenMap(int rows, int columns, string fileName)
+void MirrorMode::GivenMap(int rows, int columns, string fileName)
 {
   numRows = rows;
   numColumns = columns;
@@ -108,7 +108,7 @@ void ClassicMode::GivenMap(int rows, int columns, string fileName)
   }
 }
 
-int ClassicMode::CheckCornerTL(int row, int column)
+int MirrorMode::CheckCornerTL(int row, int column)
 {
   int numAround = 0;
   if(previousMap[row][column+1] == 'X')
@@ -126,7 +126,7 @@ int ClassicMode::CheckCornerTL(int row, int column)
   return numAround;
 }
 
-int ClassicMode::CheckCornerTR(int row, int column)
+int MirrorMode::CheckCornerTR(int row, int column)
 {
   int numAround = 0;
   if(previousMap[row+1][column] == 'X')
@@ -144,7 +144,7 @@ int ClassicMode::CheckCornerTR(int row, int column)
   return numAround;
 }
 
-int ClassicMode::CheckCornerBL(int row, int column)
+int MirrorMode::CheckCornerBL(int row, int column)
 {
   int numAround = 0;
   if(previousMap[row][column+1] == 'X')
@@ -162,7 +162,7 @@ int ClassicMode::CheckCornerBL(int row, int column)
   return numAround;
 }
 
-int ClassicMode::CheckCornerBR(int row, int column)
+int MirrorMode::CheckCornerBR(int row, int column)
 {
   int numAround = 0;
   if(previousMap[row-1][column] == 'X')
@@ -180,7 +180,7 @@ int ClassicMode::CheckCornerBR(int row, int column)
   return numAround;
 }
 
-int ClassicMode::CheckSideT(int row, int column)
+int MirrorMode::CheckSideT(int row, int column)
 {
   int numAround = 0;
   if(previousMap[row][column-1] == 'X')
@@ -206,7 +206,7 @@ int ClassicMode::CheckSideT(int row, int column)
   return numAround;
 }
 
-int ClassicMode::CheckSideR(int row, int column)
+int MirrorMode::CheckSideR(int row, int column)
 {
   int numAround = 0;
   if(previousMap[row-1][column-1] == 'X')
@@ -232,59 +232,7 @@ int ClassicMode::CheckSideR(int row, int column)
   return numAround;
 }
 
-int ClassicMode::CheckSideB(int row, int column)
-{
-  int numAround = 0;
-  if(previousMap[row][column-1] == 'X')
-  {
-    numAround++;
-  }
-  if(previousMap[row][column+1] == 'X')
-  {
-    numAround++;
-  }
-  if(previousMap[row-1][column-1] == 'X')
-  {
-    numAround++;
-  }
-  if(previousMap[row-1][column] == 'X')
-  {
-    numAround++;
-  }
-  if(previousMap[row-1][column+1] == 'X')
-  {
-    numAround++;
-  }
-  return numAround;
-}
-
-int ClassicMode::CheckSideL(int row, int column)
-{
-  int numAround = 0;
-  if(previousMap[row-1][column] == 'X')
-  {
-    numAround++;
-  }
-  if(previousMap[row-1][column+1] == 'X')
-  {
-    numAround++;
-  }
-  if(previousMap[row][column-1] == 'X')
-  {
-    numAround++;
-  }
-  if(previousMap[row+1][column+1] == 'X')
-  {
-    numAround++;
-  }
-  if(previousMap[row+1][column] == 'X')
-  {
-    numAround++;
-  }
-  return numAround;
-}
-
-int ClassicMode::CheckMiddle(int row, int column)
+int MirrorMode::CheckSideB(int row, int column)
 {
   int numAround = 0;
   if(previousMap[row][column-1] == 'X')
@@ -307,6 +255,58 @@ int ClassicMode::CheckMiddle(int row, int column)
   {
     numAround++;
   }
+  return numAround;
+}
+
+int MirrorMode::CheckSideL(int row, int column)
+{
+  int numAround = 0;
+  if(previousMap[row-1][column] == 'X')
+  {
+    numAround++;
+  }
+  if(previousMap[row-1][column+1] == 'X')
+  {
+    numAround++;
+  }
+  if(previousMap[row][column-1] == 'X')
+  {
+    numAround++;
+  }
+  if(previousMap[row+1][column+1] == 'X')
+  {
+    numAround++;
+  }
+  if(previousMap[row+1][column] == 'X')
+  {
+    numAround++;
+  }
+  return numAround;
+}
+
+int MirrorMode::CheckMiddle(int row, int column)
+{
+  int numAround = 0;
+  if(previousMap[row][column-1] == 'X')
+  {
+    numAround++;
+  }
+  if(previousMap[row][column+1] == 'X')
+  {
+    numAround++;
+  }
+  if(previousMap[row-1][column-1] == 'X')
+  {
+    numAround++;
+  }
+  if(previousMap[row-1][column] == 'X')
+  {
+    numAround++;
+  }
+  if(previousMap[row-1][column+1] == 'X')
+  {
+    numAround++;
+  }
   if(previousMap[row+1][column-1] == 'X')
   {
     numAround++;
@@ -322,7 +322,7 @@ int ClassicMode::CheckMiddle(int row, int column)
   return numAround;
 }
 
-void ClassicMode::NewGen()
+void MirrorMode::NewGen()
 {
   for(int i = 0; i < numRows; ++i)
   {
@@ -406,7 +406,7 @@ void ClassicMode::NewGen()
   }
 }
 
-void ClassicMode::PrintMap(string choice, string outputFile)
+void MirrorMode::PrintMap(string choice, string outputFile)
 {
   cout << "Generation Number: " << genNum << endl;
   for(int i = 0; i < numRows; ++i)
@@ -421,7 +421,7 @@ void ClassicMode::PrintMap(string choice, string outputFile)
   cout << endl;
 }
 
-bool ClassicMode::CheckValid()
+bool MirrorMode::CheckValid()
 {
   bool isValid = false;
   if(currentMap[0][0]  == '-')
