@@ -4,7 +4,7 @@
 # Assignment: Programming Assignment 2: Game of Life
 # About: This assignment simulates the classic Game of Life in one of three modes: classic, doughnut, or mirror.
 # Known issues:
-# - 
+# - N/A
 # Resources used:
 # - Professor German
 # - Classmates for advice
@@ -18,4 +18,4 @@
 #   - ./a.out
 # - Using make:
 #   - make
-#   - ./assignment1.exe
+#   - ./assignment2.exe

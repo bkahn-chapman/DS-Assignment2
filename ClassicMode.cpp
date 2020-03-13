@@ -23,7 +23,7 @@ ClassicMode::ClassicMode()
 //class destructor
 ClassicMode::~ClassicMode()
 {
-  cout << "The map is either completely dead, completely crowded, or in a loop. The game is over." << endl;
+  cout << "The map is either completely dead, completely crowded, or it is looping, oscillating, or repeating. The game is over." << endl;
 }
 
 //creates a random map and takes in the number of rows, the number of columns, and the frequency of cells
@@ -140,6 +140,12 @@ void ClassicMode::GivenMap(int rows, int columns, string fileName)
   while(!inFS.eof())
   {
     inFS >> noskipws >> c;
+    //in the event the X are lowercase
+    if(c == 'x')
+    {
+      c = toupper(c);
+    }
+
     //if the character is a cell on the map
     if(c == '-' || c == 'X')
     {
@@ -492,6 +498,17 @@ void ClassicMode::PrintMap(string choice, string outputFile)
     if(genNum == 0)
     {
       cout << "0" << endl;
+      //prints the map
+      genNum++;
+      for(int i = 0; i < numRows; ++i)
+      {
+        for(int j = 0; j < numColumns; ++j)
+        {
+          cout << currentMap[i][j];
+        }
+        cout << endl;
+      }
+      cout << "Generation Number: 1" << endl;
     }
     //if this is any simulated generation
     else
@@ -516,7 +533,7 @@ void ClassicMode::PrintMap(string choice, string outputFile)
     int enterCheck = 0; //checks if the user inputted enter
 
     //if at the created map
-    if(genNum != 0)
+    if(genNum != 0 || genNum != 1)
     {
       //cotninues to check until the user presses enter
       while(enterCheck == 0)
@@ -534,6 +551,17 @@ void ClassicMode::PrintMap(string choice, string outputFile)
     if(genNum == 0)
     {
       cout << "0" << endl;
+      //prints the map
+      genNum++;
+      for(int i = 0; i < numRows; ++i)
+      {
+        for(int j = 0; j < numColumns; ++j)
+        {
+          cout << currentMap[i][j];
+        }
+        cout << endl;
+      }
+      cout << "Generation Number: 1" << endl;
     }
     //if at a generated map
     else
@@ -563,6 +591,17 @@ void ClassicMode::PrintMap(string choice, string outputFile)
     if(genNum == 0)
     {
       outFS << "0" << endl;
+      //prints the map
+      genNum++;
+      for(int i = 0; i < numRows; ++i)
+      {
+        for(int j = 0; j < numColumns; ++j)
+        {
+          outFS << currentMap[i][j];
+        }
+        outFS << endl;
+      }
+      outFS << "Generation Number: 1" << endl;
     }
     //if at a generated map
     else
@@ -660,8 +699,8 @@ bool ClassicMode::CheckValid()
     isValid = false; //the generation is not valid
   }
 
-  //if there have been over 100 generations (a sign of pattern looping)
-  if(genNum > 100)
+  //if there have been over 1000 generations (a sign of pattern looping)
+  if(genNum > 1000)
   {
     isValid = false; //the generation is not valid
   }
