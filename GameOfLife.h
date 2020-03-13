@@ -1,3 +1,11 @@
+/*
+* Name: Benjamin Kahn
+* ID: 2316793
+* Class: CPSC-350-01
+* Assignment: Programming Assignment 2: Game Of Life
+* About: GameOfLife.h is the file that creates the game mode classes, their functions, and any global variables.
+*/
+
 #include <iostream>
 #include <fstream>
 #include <cmath>
