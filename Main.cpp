@@ -1,4 +1,5 @@
 #include "GameOfLife.h"
+#include <unistd.h>
 #include <iostream>
 #include <fstream>
 #include <cmath>
@@ -7,8 +8,6 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-  ClassicMode *clm = new ClassicMode();
-
   int fileCheck = 0;
   string modeChoice;
   string mapChoice;
@@ -158,6 +157,7 @@ int main(int argc, char** argv)
         }
       }
       modeCheck = 1;
+      delete clm;
     }
     else if(modeChoice == "doughnut")
     {
@@ -177,10 +177,10 @@ int main(int argc, char** argv)
         if(!(dom -> CheckValid()))
         {
           isValid = false;
-          dom -> PrintMap(waitChoice, outputFile);
         }
       }
       modeCheck = 1;
+      delete dom;
     }
     else if(modeChoice == "mirror")
     {
@@ -200,10 +200,10 @@ int main(int argc, char** argv)
         if(!(mim -> CheckValid()))
         {
           isValid = false;
-          mim -> PrintMap(waitChoice, outputFile);
         }
       }
       modeCheck = 1;
+      delete mim;
     }
     else
     {
@@ -212,23 +212,4 @@ int main(int argc, char** argv)
     }
   }
   cout << "Thank you for using my program!" << endl;
-
-  /*
-  int enterCheck = 0;
-  while(enterCheck == 0)
-  {
-    string enterInput = "";
-    cout << "Press enter." << endl;
-    cin.get();
-    if(cin.get() == '\n')
-    {
-      cout << "Enter got." << endl;
-      enterCheck = 1;
-    }
-    else
-    {
-      cout << "Enter not got." << endl;
-    }
-  }
-  */
 }

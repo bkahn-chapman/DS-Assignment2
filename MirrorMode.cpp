@@ -39,6 +39,15 @@ void MirrorMode::RandomMap(int rows, int columns, float cellFreq)
     }
   }
 
+  oscillateMap = new char*[numRows];
+  for(int i = 0; i < numRows; ++i)
+  {
+    oscillateMap[i] = new char[numColumns];
+    for(int j = 0; j < numColumns; ++j)
+    {
+      oscillateMap[i][j] = '-';
+    }
+  }
 
   int numSpaces = numRows * numColumns;
   int numFull = int(numSpaces * cellFreq);
@@ -87,6 +96,16 @@ void MirrorMode::GivenMap(int rows, int columns, string fileName)
     }
   }
 
+  oscillateMap = new char*[numRows];
+  for(int i = 0; i < numRows; ++i)
+  {
+    oscillateMap[i] = new char[numColumns];
+    for(int j = 0; j < numColumns; ++j)
+    {
+      oscillateMap[i][j] = '-';
+    }
+  }
+
   ifstream inFS;
   inFS.open(fileName);
   char c;
@@ -113,7 +132,7 @@ int MirrorMode::CheckCornerTL(int row, int column)
   int numAround = 0;
   if(previousMap[row][column+1] == 'X')
   {
-    numAround = numAround + 2;
+    numAround++;
   }
   if(previousMap[row+1][column+1] == 'X')
   {
@@ -121,11 +140,7 @@ int MirrorMode::CheckCornerTL(int row, int column)
   }
   if(previousMap[row+1][column] == 'X')
   {
-    numAround = numAround + 2;
-  }
-  if(previousMap[row][column] == 'X')
-  {
-    numAround = numAround + 3;
+    numAround++;
   }
   return numAround;
 }
@@ -135,7 +150,7 @@ int MirrorMode::CheckCornerTR(int row, int column)
   int numAround = 0;
   if(previousMap[row+1][column] == 'X')
   {
-    numAround = numAround + 2;
+    numAround++;
   }
   if(previousMap[row+1][column-1] == 'X')
   {
@@ -143,11 +158,7 @@ int MirrorMode::CheckCornerTR(int row, int column)
   }
   if(previousMap[row][column-1] == 'X')
   {
-    numAround = numAround + 2;
-  }
-  if(previousMap[row][column] == 'X')
-  {
-    numAround = numAround + 3;
+    numAround++;
   }
   return numAround;
 }
@@ -157,7 +168,7 @@ int MirrorMode::CheckCornerBL(int row, int column)
   int numAround = 0;
   if(previousMap[row][column+1] == 'X')
   {
-    numAround = numAround + 2;
+    numAround++;
   }
   if(previousMap[row-1][column+1] == 'X')
   {
@@ -165,11 +176,7 @@ int MirrorMode::CheckCornerBL(int row, int column)
   }
   if(previousMap[row-1][column] == 'X')
   {
-    numAround = numAround + 2;
-  }
-  if(previousMap[row][column] == 'X')
-  {
-    numAround = numAround + 3;
+    numAround++;
   }
   return numAround;
 }
@@ -179,7 +186,7 @@ int MirrorMode::CheckCornerBR(int row, int column)
   int numAround = 0;
   if(previousMap[row-1][column] == 'X')
   {
-    numAround = numAround + 2;
+    numAround++;
   }
   if(previousMap[row-1][column-1] == 'X')
   {
@@ -187,11 +194,7 @@ int MirrorMode::CheckCornerBR(int row, int column)
   }
   if(previousMap[row][column-1] == 'X')
   {
-    numAround = numAround + 2;
-  }
-  if(previousMap[row][column] == 'X')
-  {
-    numAround = numAround + 3;
+    numAround++;
   }
   return numAround;
 }
@@ -201,11 +204,11 @@ int MirrorMode::CheckSideT(int row, int column)
   int numAround = 0;
   if(previousMap[row][column-1] == 'X')
   {
-    numAround = numAround + 2;
+    numAround++;
   }
   if(previousMap[row][column+1] == 'X')
   {
-    numAround = numAround + 2;
+    numAround++;
   }
   if(previousMap[row+1][column-1] == 'X')
   {
@@ -216,10 +219,6 @@ int MirrorMode::CheckSideT(int row, int column)
     numAround++;
   }
   if(previousMap[row+1][column+1] == 'X')
-  {
-    numAround++;
-  }
-  if(previousMap[row][column] == 'X')
   {
     numAround++;
   }
@@ -235,7 +234,7 @@ int MirrorMode::CheckSideR(int row, int column)
   }
   if(previousMap[row-1][column] == 'X')
   {
-    numAround = numAround + 2;
+    numAround++;
   }
   if(previousMap[row][column-1] == 'X')
   {
@@ -247,10 +246,6 @@ int MirrorMode::CheckSideR(int row, int column)
   }
   if(previousMap[row+1][column] == 'X')
   {
-    numAround = numAround + 2;
-  }
-  if(previousMap[row][column] == 'X')
-  {
     numAround++;
   }
   return numAround;
@@ -261,11 +256,11 @@ int MirrorMode::CheckSideB(int row, int column)
   int numAround = 0;
   if(previousMap[row][column-1] == 'X')
   {
-    numAround = numAround + 2;
+    numAround++;
   }
   if(previousMap[row][column+1] == 'X')
   {
-    numAround = numAround + 2;
+    numAround++;
   }
   if(previousMap[row-1][column-1] == 'X')
   {
@@ -279,10 +274,6 @@ int MirrorMode::CheckSideB(int row, int column)
   {
     numAround++;
   }
-  if(previousMap[row][column] == 'X')
-  {
-    numAround++;
-  }
   return numAround;
 }
 
@@ -291,7 +282,7 @@ int MirrorMode::CheckSideL(int row, int column)
   int numAround = 0;
   if(previousMap[row-1][column] == 'X')
   {
-    numAround = numAround + 2;
+    numAround++;
   }
   if(previousMap[row-1][column+1] == 'X')
   {
@@ -306,10 +297,6 @@ int MirrorMode::CheckSideL(int row, int column)
     numAround++;
   }
   if(previousMap[row+1][column] == 'X')
-  {
-    numAround = numAround + 2;
-  }
-  if(previousMap[row][column] == 'X')
   {
     numAround++;
   }
@@ -360,6 +347,7 @@ void MirrorMode::NewGen()
   {
     for(int j = 0; j < numColumns; ++j)
     {
+      oscillateMap[i][j] = previousMap[i][j];
       previousMap[i][j] = currentMap[i][j];
     }
   }
@@ -420,11 +408,11 @@ void MirrorMode::NewGen()
       {
         currentMap[i][j] = '-';
       }
-      else if(numAround == 2)
+      else if(numAround < 3)
       {
 
       }
-      else if(numAround == 3)
+      else if(numAround < 4)
       {
         currentMap[i][j] = 'X';
       }
@@ -438,7 +426,7 @@ void MirrorMode::NewGen()
 
 void MirrorMode::PrintMap(string choice, string outputFile)
 {
-  cout << "Mirror Number: " << genNum << endl;
+  cout << "Generation Number: " << genNum << endl;
   for(int i = 0; i < numRows; ++i)
   {
     for(int j = 0; j < numColumns; ++j)
@@ -455,6 +443,7 @@ bool MirrorMode::CheckValid()
 {
   bool isValid = false;
   int loopCheck = 0;
+  int numSpaces = (numRows * numColumns);
   if(currentMap[0][0]  == '-')
   {
     for(int i = 0; i < numRows; ++i)
@@ -481,7 +470,7 @@ bool MirrorMode::CheckValid()
       }
     }
   }
-  /*
+
   for(int i = 0; i < numRows; ++i)
   {
     for(int j = 0; j < numColumns; ++j)
@@ -492,11 +481,25 @@ bool MirrorMode::CheckValid()
       }
     }
   }
-  cout << loopCheck << endl;
-  if(loopCheck != (numRows * numColumns))
+  if(loopCheck == numSpaces)
   {
-    isValid = true;
+    isValid = false;
   }
-  */
+
+  loopCheck = 0;
+  for(int i = 0; i < numRows; ++i)
+  {
+    for(int j = 0; j < numColumns; ++j)
+    {
+      if(currentMap[i][j] == oscillateMap[i][j])
+      {
+        loopCheck++;
+      }
+    }
+  }
+  if(loopCheck == numSpaces)
+  {
+    isValid = false;
+  }
   return isValid;
 }

@@ -39,6 +39,15 @@ void DoughnutMode::RandomMap(int rows, int columns, float cellFreq)
     }
   }
 
+  oscillateMap = new char*[numRows];
+  for(int i = 0; i < numRows; ++i)
+  {
+    oscillateMap[i] = new char[numColumns];
+    for(int j = 0; j < numColumns; ++j)
+    {
+      oscillateMap[i][j] = '-';
+    }
+  }
 
   int numSpaces = numRows * numColumns;
   int numFull = int(numSpaces * cellFreq);
@@ -77,13 +86,22 @@ void DoughnutMode::GivenMap(int rows, int columns, string fileName)
   }
 
   previousMap = new char*[numRows];
-
   for(int i = 0; i < numRows; ++i)
   {
     previousMap[i] = new char[numColumns];
     for(int j = 0; j < numColumns; ++j)
     {
       previousMap[i][j] = '-';
+    }
+  }
+
+  oscillateMap = new char*[numRows];
+  for(int i = 0; i < numRows; ++i)
+  {
+    oscillateMap[i] = new char[numColumns];
+    for(int j = 0; j < numColumns; ++j)
+    {
+      oscillateMap[i][j] = '-';
     }
   }
 
@@ -328,6 +346,7 @@ void DoughnutMode::NewGen()
   {
     for(int j = 0; j < numColumns; ++j)
     {
+      oscillateMap[i][j] = previousMap[i][j];
       previousMap[i][j] = currentMap[i][j];
     }
   }
@@ -406,7 +425,7 @@ void DoughnutMode::NewGen()
 
 void DoughnutMode::PrintMap(string choice, string outputFile)
 {
-  cout << "Donut Number: " << genNum << endl;
+  cout << "Generation Number: " << genNum << endl;
   for(int i = 0; i < numRows; ++i)
   {
     for(int j = 0; j < numColumns; ++j)
@@ -423,6 +442,7 @@ bool DoughnutMode::CheckValid()
 {
   bool isValid = false;
   int loopCheck = 0;
+  int numSpaces = (numRows * numColumns);
   if(currentMap[0][0]  == '-')
   {
     for(int i = 0; i < numRows; ++i)
@@ -449,7 +469,7 @@ bool DoughnutMode::CheckValid()
       }
     }
   }
-  /*
+
   for(int i = 0; i < numRows; ++i)
   {
     for(int j = 0; j < numColumns; ++j)
@@ -460,11 +480,25 @@ bool DoughnutMode::CheckValid()
       }
     }
   }
-  cout << loopCheck << endl;
-  if(loopCheck != (numRows * numColumns))
+  if(loopCheck == numSpaces)
   {
-    isValid = true;
+    isValid = false;
   }
-  */
+
+  loopCheck = 0;
+  for(int i = 0; i < numRows; ++i)
+  {
+    for(int j = 0; j < numColumns; ++j)
+    {
+      if(currentMap[i][j] == oscillateMap[i][j])
+      {
+        loopCheck++;
+      }
+    }
+  }
+  if(loopCheck == numSpaces)
+  {
+    isValid = false;
+  }
   return isValid;
 }

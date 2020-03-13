@@ -1,4 +1,5 @@
 #include "GameOfLife.h"
+#include <unistd.h>
 #include <iostream>
 #include <fstream>
 #include <cmath>
@@ -12,7 +13,7 @@ ClassicMode::ClassicMode()
 
 ClassicMode::~ClassicMode()
 {
-
+  cout << "The map is either completely dead, completely crowded, or in a loop. The game is over." << endl;
 }
 
 void ClassicMode::RandomMap(int rows, int columns, float cellFreq)
@@ -39,6 +40,15 @@ void ClassicMode::RandomMap(int rows, int columns, float cellFreq)
     }
   }
 
+  oscillateMap = new char*[numRows];
+  for(int i = 0; i < numRows; ++i)
+  {
+    oscillateMap[i] = new char[numColumns];
+    for(int j = 0; j < numColumns; ++j)
+    {
+      oscillateMap[i][j] = '-';
+    }
+  }
 
   int numSpaces = numRows * numColumns;
   int numFull = int(numSpaces * cellFreq);
@@ -87,6 +97,16 @@ void ClassicMode::GivenMap(int rows, int columns, string fileName)
     }
   }
 
+  oscillateMap = new char*[numRows];
+  for(int i = 0; i < numRows; ++i)
+  {
+    oscillateMap[i] = new char[numColumns];
+    for(int j = 0; j < numColumns; ++j)
+    {
+      oscillateMap[i][j] = '-';
+    }
+  }
+
   ifstream inFS;
   inFS.open(fileName);
   char c;
@@ -106,6 +126,7 @@ void ClassicMode::GivenMap(int rows, int columns, string fileName)
       rowCount++;
     }
   }
+  inFS.close();
 }
 
 int ClassicMode::CheckCornerTL(int row, int column)
@@ -328,6 +349,7 @@ void ClassicMode::NewGen()
   {
     for(int j = 0; j < numColumns; ++j)
     {
+      oscillateMap[i][j] = previousMap[i][j];
       previousMap[i][j] = currentMap[i][j];
     }
   }
@@ -406,23 +428,93 @@ void ClassicMode::NewGen()
 
 void ClassicMode::PrintMap(string choice, string outputFile)
 {
-  cout << "Generation Number: " << genNum << endl;
-  for(int i = 0; i < numRows; ++i)
+  if(choice == "pause")
   {
-    for(int j = 0; j < numColumns; ++j)
+    usleep(500000);
+    if(genNum == 0)
     {
-      cout << currentMap[i][j];
+      cout << "0" << endl;
+      genNum++;
     }
-    cout << endl;
+    else
+    {
+      cout << "Generation Number: " << genNum << endl;
+    }
+    for(int i = 0; i < numRows; ++i)
+    {
+      for(int j = 0; j < numColumns; ++j)
+      {
+        cout << currentMap[i][j];
+      }
+      cout << endl;
+    }
+    genNum++;
   }
-  genNum++;
-  cout << endl;
+  else if(choice == "enter")
+  {
+    int enterCheck = 0;
+    if(genNum != 0)
+    {
+      while(enterCheck == 0)
+      {
+        string enterInput = "";
+        cout << "Press enter to continue." << endl;
+        if(cin.get() == '\n')
+        {
+          enterCheck = 1;
+        }
+      }
+    }
+    if(genNum == 0)
+    {
+      cout << "0" << endl;
+      genNum++;
+    }
+    else
+    {
+      cout << "Generation Number: " << genNum << endl;
+    }
+    for(int i = 0; i < numRows; ++i)
+    {
+      for(int j = 0; j < numColumns; ++j)
+      {
+        cout << currentMap[i][j];
+      }
+      cout << endl;
+    }
+    genNum++;
+  }
+  else if(choice == "write")
+  {
+    ofstream outFS;
+    outFS.open(outputFile, ios::app);
+    if(genNum == 0)
+    {
+      outFS << "0" << endl;
+      genNum++;
+    }
+    else
+    {
+      outFS << "Generation Number: " << genNum << endl;
+    }
+    for(int i = 0; i < numRows; ++i)
+    {
+      for(int j = 0; j < numColumns; ++j)
+      {
+        outFS << currentMap[i][j];
+      }
+      outFS << endl;
+    }
+    genNum++;
+    outFS.close();
+  }
 }
 
 bool ClassicMode::CheckValid()
 {
   bool isValid = false;
   int loopCheck = 0;
+  int numSpaces = (numRows * numColumns);
   if(currentMap[0][0]  == '-')
   {
     for(int i = 0; i < numRows; ++i)
@@ -449,7 +541,7 @@ bool ClassicMode::CheckValid()
       }
     }
   }
-  /*
+
   for(int i = 0; i < numRows; ++i)
   {
     for(int j = 0; j < numColumns; ++j)
@@ -460,11 +552,30 @@ bool ClassicMode::CheckValid()
       }
     }
   }
-  cout << loopCheck << endl;
-  if(loopCheck != (numRows * numColumns))
+  if(loopCheck == numSpaces)
   {
-    isValid = true;
+    isValid = false;
   }
-  */
+
+  loopCheck = 0;
+  for(int i = 0; i < numRows; ++i)
+  {
+    for(int j = 0; j < numColumns; ++j)
+    {
+      if(currentMap[i][j] == oscillateMap[i][j])
+      {
+        loopCheck++;
+      }
+    }
+  }
+  if(loopCheck == numSpaces)
+  {
+    isValid = false;
+  }
+
+  if(genNum > 100)
+  {
+    isValid = false;
+  }
   return isValid;
 }

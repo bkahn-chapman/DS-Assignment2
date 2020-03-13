@@ -4,6 +4,7 @@
 #include <string>
 using namespace std;
 
+//for classic mode
 class ClassicMode
 {
   public:
@@ -26,20 +27,18 @@ class ClassicMode
 
     int numRows; //number of rows in the map
     int numColumns; //number of columns in the map
-    int genNum;
+    int genNum; //tracks the current generation number
 
     void NewGen(); //generates the next map and sends the old one to the previous map
     void PrintMap(string choice, string outputFile); //prints the current map
     bool CheckValid(); //checks if the generations should continue
 
+    char** oscillateMap; //map before the previous map
     char** previousMap; //old map
     char** currentMap; //new map
-
-
-
-  private:
 };
 
+//for doughnut mode
 class DoughnutMode
 {
   public:
@@ -62,21 +61,18 @@ class DoughnutMode
 
     int numRows; //number of rows in the map
     int numColumns; //number of columns in the map
-    int genNum;
+    int genNum; //tracks the current generation number
 
     void NewGen(); //generates the next map and sends the old one to the previous map
     void PrintMap(string choice, string outputFile); //prints the current map
     bool CheckValid(); //checks if the generations should continue
 
+    char** oscillateMap; //map before the previous map
     char** previousMap; //old map
     char** currentMap; //new map
-
-
-
-  private:
 };
 
-
+//for mirror mode
 class MirrorMode
 {
   public:
@@ -99,16 +95,13 @@ class MirrorMode
 
     int numRows; //number of rows in the map
     int numColumns; //number of columns in the map
-    int genNum;
+    int genNum; //tracks the current generation number
 
     void NewGen(); //generates the next map and sends the old one to the previous map
     void PrintMap(string choice, string outputFile); //prints the current map
     bool CheckValid(); //checks if the generations should continue
 
+    char** oscillateMap; //map before the previous map
     char** previousMap; //old map
     char** currentMap; //new map
-
-
-
-  private:
 };
